@@ -1,0 +1,12 @@
+{
+    // 保存時にフォーマット
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit",
+        "source.addMissingImports": "explicit",
+        "source.fixAll": "explicit"
+    },
+    "cSpell.words": [
+        "onabe"
+    ],
+}
