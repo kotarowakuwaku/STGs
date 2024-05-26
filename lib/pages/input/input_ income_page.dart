@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:save_towards_your_goal_simulator/pages/input/input_outcome_page.dart';
 import 'package:save_towards_your_goal_simulator/pages/input/input_spending_page.dart';
 
 class InputIncomePage extends StatefulWidget {
@@ -95,7 +96,7 @@ class _InputIncomePageState extends State<InputIncomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const InputSpendingPage(),
+                  builder: (context) => const InputOutcomePage(),
                 ),
               );
             },
