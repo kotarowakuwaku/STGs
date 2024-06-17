@@ -17,6 +17,16 @@ class _InputIncomePageState extends State<InputIncomePage> {
   String time = '0';
   int result = 0;
 
+  void calculateResult() {
+    if (incomeController.text.isNotEmpty && timeController.text.isNotEmpty) {
+      final int incomeValue = int.parse(incomeController.text);
+      final int timeValue = int.parse(timeController.text);
+      setState(() {
+        result = incomeValue * timeValue;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +48,9 @@ class _InputIncomePageState extends State<InputIncomePage> {
               ),
             ),
           ),
-          (incomeController.text != '' && timeController.text != '')?Text((int.parse(incomeController.text) * int.parse(timeController.text)).toString() + '円'):Text(''),
+          (incomeController.text.isNotEmpty && timeController.text.isNotEmpty)
+              ? Text('$result円')
+              : Text(''),
           Container(
             margin: EdgeInsets.symmetric(vertical: 30),
             child: Row(
@@ -52,10 +64,11 @@ class _InputIncomePageState extends State<InputIncomePage> {
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: const InputDecoration(),
                     controller: incomeController,
-                    onChanged: (value){
+                    onChanged: (value) {
                       setState(() {
                         income = value;
                       });
+                      calculateResult();
                     },
                   ),
                 ),
@@ -78,10 +91,11 @@ class _InputIncomePageState extends State<InputIncomePage> {
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: const InputDecoration(),
                     controller: timeController,
-                    onChanged: (value){
+                    onChanged: (value) {
                       setState(() {
                         time = value;
                       });
+                      calculateResult();
                     },
                   ),
                 ),
@@ -96,7 +110,7 @@ class _InputIncomePageState extends State<InputIncomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const InputOutcomePage(),
+                  builder: (context) => InputOutcomePage(incomeData: result),
                 ),
               );
             },
