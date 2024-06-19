@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../result_page.dart';
+
 class InputOutcomePage extends StatefulWidget {
-  const InputOutcomePage({Key? key}) : super(key: key);
+  final int incomeData;
+
+  InputOutcomePage({Key? key, required this.incomeData}) : super(key: key);
 
   @override
   _InputOutcomePageState createState() => _InputOutcomePageState();
@@ -55,6 +59,16 @@ class _InputOutcomePageState extends State<InputOutcomePage> {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                '収入: ${widget.incomeData} 円',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -73,8 +87,8 @@ class _InputOutcomePageState extends State<InputOutcomePage> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: _textFormField(
-                          textEditingController: _textEditingControllers[index],
+                        child: _buildTextFormField(
+                          controller: _textEditingControllers[index],
                           onChanged: (value) {
                             _names[index] = value;
                           },
@@ -82,8 +96,8 @@ class _InputOutcomePageState extends State<InputOutcomePage> {
                       ),
                       const SizedBox(width: 20.0),
                       Expanded(
-                        child: _numberTextFormField(
-                          textEditingController: _numberEditingControllers[index],
+                        child: _buildNumberFormField(
+                          controller: _numberEditingControllers[index],
                           onChanged: (value) {
                             setState(() {
                               _amounts[index] = int.tryParse(value) ?? 0;
@@ -99,30 +113,17 @@ class _InputOutcomePageState extends State<InputOutcomePage> {
             ),
             Align(
               alignment: Alignment.topRight,
-              child: _textButton(
-                onPressed: () {
-                  setState(() {
-                    _textEditingControllers.add(TextEditingController());
-                    _numberEditingControllers.add(TextEditingController());
-                    _names.add('');
-                    _amounts.add(0);
-                  });
-                },
-              ),
+              child: _buildAddRowButton(),
             ),
             Align(
               alignment: Alignment.center,
-              child: _resultButton(
-                onPressed: () {
-                  _calculateTotalAmount();
-                },
-              ),
+              child: _buildResultButton(),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
                 '合計金額: $_totalAmount 円',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -134,9 +135,9 @@ class _InputOutcomePageState extends State<InputOutcomePage> {
     );
   }
 
-  Widget _textFormField({required TextEditingController textEditingController, required Function(String) onChanged}) {
+  Widget _buildTextFormField({required TextEditingController controller, required Function(String) onChanged}) {
     return TextFormField(
-      controller: textEditingController,
+      controller: controller,
       maxLength: null,
       onChanged: onChanged,
       decoration: const InputDecoration(
@@ -144,22 +145,18 @@ class _InputOutcomePageState extends State<InputOutcomePage> {
         fillColor: Colors.white,
         filled: true,
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.black,
-          ),
+          borderSide: BorderSide(color: Colors.black),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.black,
-          ),
+          borderSide: BorderSide(color: Colors.black),
         ),
       ),
     );
   }
 
-  Widget _numberTextFormField({required TextEditingController textEditingController, required Function(String) onChanged}) {
+  Widget _buildNumberFormField({required TextEditingController controller, required Function(String) onChanged}) {
     return TextFormField(
-      controller: textEditingController,
+      controller: controller,
       maxLength: null,
       onChanged: onChanged,
       keyboardType: TextInputType.number,
@@ -169,40 +166,47 @@ class _InputOutcomePageState extends State<InputOutcomePage> {
         fillColor: Colors.white,
         filled: true,
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.black,
-          ),
+          borderSide: BorderSide(color: Colors.black),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.black,
-          ),
+          borderSide: BorderSide(color: Colors.black),
         ),
       ),
     );
   }
 
-  Widget _textButton({required void Function() onPressed}) {
+  Widget _buildAddRowButton() {
     return TextButton(
-      onPressed: onPressed,
+      onPressed: () {
+        setState(() {
+          _textEditingControllers.add(TextEditingController());
+          _numberEditingControllers.add(TextEditingController());
+          _names.add('');
+          _amounts.add(0);
+        });
+      },
       child: const Text(
         "+",
-        style: TextStyle(
-          fontSize: 30,
-        ),
+        style: TextStyle(fontSize: 30),
       ),
     );
   }
-}
 
-Widget _resultButton({required void Function() onPressed}) {
-  return TextButton(
-    onPressed: onPressed,
-    child: const Text(
-      "完了",
-      style: TextStyle(
-        fontSize: 30,
+  Widget _buildResultButton() {
+    return TextButton(
+      onPressed: () {
+        _calculateTotalAmount();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ResultPage(outcomeData: _totalAmount, incomeData: widget.incomeData),
+          ),
+        );
+      },
+      child: const Text(
+        "完了",
+        style: TextStyle(fontSize: 30),
       ),
-    ),
-  );
+    );
+  }
 }
