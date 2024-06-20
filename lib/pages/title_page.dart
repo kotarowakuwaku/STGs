@@ -19,12 +19,16 @@ class TitlePage extends StatelessWidget {
               'images/stgs.jpeg',
               width: double.infinity,
             ),
-            const SizedBox(height: 20), // Optional: Add some space between the image and the button
+            const SizedBox(height: 60), // Optional: Add some space between the image and the button
             TextButton(
               child: const Text('-スタート-'),
               style: TextButton.styleFrom(
                 foregroundColor: Colors.yellow,
+                textStyle: const TextStyle(
+                  fontSize: 24, // Text size
+                ),
               ),
+
               onPressed: () {
                 Navigator.push(
                   context,
