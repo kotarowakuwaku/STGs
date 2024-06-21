@@ -46,6 +46,7 @@ class _InputIncomePageState extends State<InputIncomePage> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 53,
+                  fontWeight: FontWeight.bold,
                 backgroundColor: Color(0xFF008001),
               ),
             ),
