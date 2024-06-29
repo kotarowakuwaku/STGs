@@ -16,7 +16,7 @@ class TitlePage extends StatelessWidget {
           children: [
             // アプリ内から画像を表示
             Image.asset(
-              'images/stgs.jpeg',
+              'images/stgs_title.jpeg',
               width: double.infinity,
             ),
             const SizedBox(height: 60), // Optional: Add some space between the image and the button
